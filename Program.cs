@@ -57,6 +57,7 @@ namespace RhythmsGonnaGetYou
             while (whileRunning == true)
             {
                 var context = new SuncoastRecordsContext();
+                var theBands = context.Bands;
                 var theAlbums = context.Album.Include(Album => Album.Band);
 
                 Console.WriteLine();
@@ -113,10 +114,10 @@ namespace RhythmsGonnaGetYou
                 }
                 if (choice == "View bands")
                 {
-                    foreach (var theBand in theAlbums)
+                    foreach (var theBand in theBands)
 
                     {
-                        Console.WriteLine($"There is a band named {theBand.Band.Name}");
+                        Console.WriteLine($"There is a band named {theBand.Name}");
                     }
                 }
                 if (choice == "Add album")
@@ -214,9 +215,16 @@ namespace RhythmsGonnaGetYou
                     if (foundBand != null)
                     {
                         var foundAlbums = context.Album.Where(album => album.Band.Name == bandName && album.BandId == album.Band.Id);
-                        foreach (var album in foundAlbums)
+                        if (foundAlbums != null)
                         {
-                            Console.WriteLine($"There is an album called {album.Title} by this band");
+                            foreach (var album in foundAlbums)
+                            {
+                                Console.WriteLine($"There is an album called {album.Title} by this band");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("This band has no albums in the database.");
                         }
                     }
                 }
